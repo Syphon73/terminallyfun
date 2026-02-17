@@ -13,11 +13,13 @@ int main (int argc, char *argv[]) {
   myChip8.LoadROM("test.ch8"); 
 
   std::cout << "ROM loaded! Starting emulation loop..." << std::endl;
-  int i = 0;
-  while(i<=5){
+
+  while(true){
     // loop (fetch -> decode -> execute)
     myChip8.gameLoop();
-    i++;
+    //refreshScreen();
+
+    usleep(1200);
 
   }
 

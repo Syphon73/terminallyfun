@@ -8,17 +8,17 @@
 
 // define the constructor
 Chip8::Chip8() {
-    // Initialize PC = Start of ROM
-    pc = START_ADDRESS;
+  // Initialize PC = Start of ROM
+  pc = START_ADDRESS;
 
 
-    opcode = 0;
-    index = 0;
-    sp = 0;
+  opcode = 0;
+  index = 0;
+  sp = 0;
 
-    memset(memory, 0, sizeof(memory));
-    memset(registers, 0, sizeof(registers));
-    memset(stack, 0, sizeof(stack));
+  memset(memory, 0, sizeof(memory));
+  memset(registers, 0, sizeof(registers));
+  memset(stack, 0, sizeof(stack));
        
 }
 
@@ -64,6 +64,14 @@ void Chip8::LoadROM(char const* filename)
 	}
 }
 
+void graphic(){
+  // TODO: read sprite from memory
+
+  //drawing()
+  //drawflag = true
+
+
+}
 
 void Chip8::gameLoop()
 {
@@ -97,15 +105,23 @@ void Chip8::gameLoop()
 
     case 0xD000: // DRAW
         {
-            // Just print a debug message for now to prove it works
-            uint8_t x = registers[(opcode & 0x0F00) >> 8];
-            uint8_t y = registers[(opcode & 0x00F0) >> 4];
-            uint8_t height = opcode & 0x000F;
-            
-            printf("Opcode DXYN: Drawing at (%d, %d), Height: %d\n", x, y, height);
-            printf("Sprite data is at Memory[%03X]\n", index);
-            
-            // TODO: Implement actual XOR drawing logic here later
+            // // Just print a debug message for now to prove it works
+            // uint8_t x = registers[(opcode & 0x0F00) >> 8];
+            // uint8_t y = registers[(opcode & 0x00F0) >> 4];
+            // uint8_t height = opcode & 0x000F;
+            //
+            // printf("Opcode DXYN: Drawing at (%d, %d), Height: %d\n", x, y, height);
+            // printf("Sprite data is at Memory[%03X]\n", index);
+
+          bool Chip8::refreshScreen(){
+
+            graphic();
+            // if drawflag == true then print video[] as ASCII
+            // drawflag = false
+
+          };
+
+
         }
         break;
 
