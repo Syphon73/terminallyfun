@@ -4,6 +4,27 @@
 #include <cstdint>
 #include <fstream>
 
+
+void drawGraphics(Chip8& myChip8) {
+    // Clear the terminal screen
+    std::cout << "\033[H"; 
+
+    for (int y = 0; y < 32; ++y) {
+        for (int x = 0; x < 64; ++x) {
+            
+            int idx = x + (y * 64);
+            
+            if (myChip8.video[idx] == 1) {
+                std::cout << "*";//"█";
+            } else {
+                std::cout << " ";
+            }
+        }
+        std::cout << std::endl;
+    }
+  }
+
+
 int main (int argc, char *argv[]) {
   
   //use the constructor
@@ -13,11 +34,18 @@ int main (int argc, char *argv[]) {
   myChip8.LoadROM("test.ch8"); 
 
   std::cout << "ROM loaded! Starting emulation loop..." << std::endl;
-  int i = 0;
-  while(i<=5){
+
+  while(true){
     // loop (fetch -> decode -> execute)
     myChip8.gameLoop();
-    i++;
+    //refreshScreen();
+    
+    if(myChip8.drawflag){
+      drawGraphics(myChip8);
+      myChip8.drawflag = false;
+    }
+
+    usleep(2000);
 
   }
 
