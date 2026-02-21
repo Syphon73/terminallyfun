@@ -4,6 +4,27 @@
 #include <cstdint>
 #include <fstream>
 
+
+void drawGraphics(Chip8& myChip8) {
+    // Clear the terminal screen
+    std::cout << "\033[H"; 
+
+    for (int y = 0; y < 32; ++y) {
+        for (int x = 0; x < 64; ++x) {
+            
+            int idx = x + (y * 64);
+            
+            if (myChip8.video[idx] == 1) {
+                std::cout << "*";//"█";
+            } else {
+                std::cout << " ";
+            }
+        }
+        std::cout << std::endl;
+    }
+  }
+
+
 int main (int argc, char *argv[]) {
   
   //use the constructor
@@ -18,8 +39,13 @@ int main (int argc, char *argv[]) {
     // loop (fetch -> decode -> execute)
     myChip8.gameLoop();
     //refreshScreen();
+    
+    if(myChip8.drawflag){
+      drawGraphics(myChip8);
+      myChip8.drawflag = false;
+    }
 
-    usleep(1200);
+    usleep(2000);
 
   }
 
