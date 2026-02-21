@@ -20,6 +20,15 @@ public:
   void LoadROM(char const* filename);
   void gameLoop();
 
+  bool refreshScreen();
+  void graphic(uint8_t x,uint8_t y,uint8_t height);
+
+  static const unsigned int FONTSET_SIZE = 80;
+  uint8_t fontset[FONTSET_SIZE];
+  bool drawflag;
+  
+
+
 	uint8_t registers[16]{};
 	uint8_t memory[4096]{};
 	uint16_t index{};
