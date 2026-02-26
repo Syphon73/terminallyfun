@@ -7,15 +7,15 @@
 
 void drawGraphics(Chip8& myChip8) {
     // Clear the terminal screen
-    std::cout << "\033[H"; 
-
+    std::cout << "\033[H";  
     for (int y = 0; y < 32; ++y) {
+      std::cout<<"Video buffer check - pixels at row 5:";
         for (int x = 0; x < 64; ++x) {
-            
+          std::cout<<myChip8.video[5 * 64 + x];
             int idx = x + (y * 64);
             
             if (myChip8.video[idx] == 1) {
-                std::cout << "*";//"█";
+                std::cout << "█";
             } else {
                 std::cout << " ";
             }
