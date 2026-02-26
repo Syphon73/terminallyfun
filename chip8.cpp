@@ -87,13 +87,13 @@ void Chip8::LoadROM(char const* filename)
 
       //print the buffer
 
-      std::cout<<"printing the buffer: "<<std::endl;
-      for(long i = 0; i < size; ++i){
-
-        std::cout<<buffer[i]<<std::endl;
-
-      }
-      // Free the buffer
+      // std::cout<<"printing the buffer: "<<std::endl;
+      // for(long i = 0; i < size; ++i){
+      //
+      //   std::cout<<buffer[i]<<std::endl;
+      //
+      // }
+      // // Free the buffer
       delete[] buffer;
 
     }
@@ -108,34 +108,41 @@ void Chip8::graphic(uint8_t x, uint8_t y, uint8_t height){
   // TODO: read sprite from memory
   uint8_t pixel;
   //drawing()
+  int targetX = x % 64;
+  int targetY = y % 32;
+
   
   for (int yline = 0; yline < height; yline++)
   {
+      int sy = y + yline;
       pixel = memory[index + yline];
 
+      if (sy >= 32){
+        break; //vertical clipping
+      }
       for (int xline = 0; xline < 8; xline++)
       {
+          int sx = x + xline;
+          if (sx >= 64) {
+            break; //horiozontal clip
+          }
+
           if ((pixel & (0x80 >> xline)) != 0)
           {
-  
-              int targetX = (x + xline) % 64;
-              int targetY = (y + yline) % 32;
-              int idx = targetX + (targetY * 64);
+             int idx = sx + (sy * 64);
+            // COLLISION DETECTION
+            if (video[idx] == 1)
+            {
+                registers[0xF] = 1;
+            }
+            // 1 ^ 1 = 0 (Erase)
+            // 0 ^ 1 = 1 (Draw)
+            video[idx] ^= 1;
 
-              // COLLISION DETECTION
-              if (video[idx] == 1)
-              {
-                  registers[0xF] = 1;
-              }
-
-              // 1 ^ 1 = 0 (Erase)
-              // 0 ^ 1 = 1 (Draw)
-              video[idx] ^= 1;
+            
           }
        }
   }
-  //drawflag = true
-
 }
 
 
@@ -166,7 +173,7 @@ void Chip8::gameLoop()
 
     case 0x1000: // JUMP
       pc = opcode & 0x0FFF; // Jump to NNN
-      printf("Opcode 1NNN: Jumped to %03X\n", pc);
+      //printf("Opcode 1NNN: Jumped to %03X\n", pc);
       break;
 
     case 0x6000: // SET REGISTER
@@ -174,13 +181,15 @@ void Chip8::gameLoop()
             uint8_t x = (opcode & 0x0F00) >> 8;
             uint8_t nn = opcode & 0x00FF;
             registers[x] = nn;
-            printf("Opcode 6XNN: Set V%X to %d\n", x, nn);
+            //printf("Opcode 6XNN: Set V%X to %d\n", x, nn);
+            //printf("6XNN: V%X = %d (pc=0x%03X)\n", x, nn, pc);
         }
         break;
 
     case 0xA000: // SET INDEX
         index = opcode & 0x0FFF;
-        printf("Opcode ANNN: Set I to %03X\n", index); 
+        //printf("Opcode ANNN: Set I to %03X\n", index);
+        //printf("ANNN: I = 0x%03X (pc=0x%03X)\n", index, pc);
         break;
 
     case 0xD000: // DRAW
@@ -189,6 +198,11 @@ void Chip8::gameLoop()
             uint8_t x = registers[(opcode & 0x0F00) >> 8];
             uint8_t y = registers[(opcode & 0x00F0) >> 4];
             uint8_t height = opcode & 0x000F;
+
+            // printf("DRAW: V[%d]=%d, V[%d]=%d, h=%d, I=0x%03X\n",
+            //    (opcode & 0x0F00) >> 8, x,
+            //    (opcode & 0x00F0) >> 4, y,
+            //    height, index);
 
             //reset collision flag (VF) to handle physics
             registers[0xF] = 0;
