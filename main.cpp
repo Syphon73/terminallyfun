@@ -51,13 +51,13 @@ int main (int argc, char *argv[]) {
   Chip8 myChip8;
 
   std::cout << "Loading ROM..." << std::endl;
-  myChip8.LoadROM("/testROM/1-chip8-logo.ch8"); 
+  myChip8.LoadROM("testROM/2-ibm-logo.ch8"); 
 
   std::cout << "ROM loaded! Starting emulation loop..." << std::endl;
 
   InitWindow(64 * SCALE, 32 * SCALE, "CHIP-8 Emulator");
   SetTargetFPS(60);
-
+  
   while(!WindowShouldClose()){
     // loop (fetch -> decode -> execute)
     myChip8.gameLoop();
@@ -68,7 +68,7 @@ int main (int argc, char *argv[]) {
       myChip8.drawflag = false;
     }
 
-   // usleep(2000);
+   usleep(2000);
 
   }
 
