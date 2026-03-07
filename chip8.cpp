@@ -45,6 +45,7 @@ Chip8::Chip8() {
   memset(stack, 0, sizeof(stack));
   memset(video, 0, sizeof(video));
   memset(keypad, 0, sizeof(keypad));
+  memset(stack, 0, sizeof(stack));
 
   for (int i = 0; i < FONTSET_SIZE; ++i) {
       memory[i] = fontset[i];
@@ -166,6 +167,10 @@ void Chip8::gameLoop()
           memset(video, 0, sizeof(video));
           drawflag = true; // Tell main loop to redraw (as empty)
           break;
+        
+        case 0x00EE: //return pc from the stack
+          sp--;
+          pc = stack[sp];
 
       }
     }
@@ -175,6 +180,13 @@ void Chip8::gameLoop()
       pc = opcode & 0x0FFF; // Jump to NNN
       //printf("Opcode 1NNN: Jumped to %03X\n", pc);
       break;
+    
+
+    case 0x2000: //call subroutine, pc->stack[top]
+      stack[sp] = pc;
+      sp++;
+      pc = opcode & 0x0FFF;   // jump to subroutine
+      break;
 
     case 0x6000: // SET REGISTER
         {
@@ -182,14 +194,14 @@ void Chip8::gameLoop()
             uint8_t nn = opcode & 0x00FF;
             registers[x] = nn;
             //printf("Opcode 6XNN: Set V%X to %d\n", x, nn);
-            //printf("6XNN: V%X = %d (pc=0x%03X)\n", x, nn, pc);
+            printf("6XNN: V%X = %d (pc=0x%03X)\n", x, nn, pc);
         }
         break;
 
     case 0xA000: // SET INDEX
         index = opcode & 0x0FFF;
         //printf("Opcode ANNN: Set I to %03X\n", index);
-        //printf("ANNN: I = 0x%03X (pc=0x%03X)\n", index, pc);
+        printf("ANNN: I = 0x%03X (pc=0x%03X)\n", index, pc);
         break;
 
     case 0xD000: // DRAW
@@ -199,10 +211,10 @@ void Chip8::gameLoop()
             uint8_t y = registers[(opcode & 0x00F0) >> 4];
             uint8_t height = opcode & 0x000F;
 
-            // printf("DRAW: V[%d]=%d, V[%d]=%d, h=%d, I=0x%03X\n",
-            //    (opcode & 0x0F00) >> 8, x,
-            //    (opcode & 0x00F0) >> 4, y,
-            //    height, index);
+            printf("DRAW: V[%d]=%d, V[%d]=%d, h=%d, I=0x%03X\n",
+                (opcode & 0x0F00) >> 8, x,
+                (opcode & 0x00F0) >> 4, y,
+                height, index);
 
             //reset collision flag (VF) to handle physics
             registers[0xF] = 0;
