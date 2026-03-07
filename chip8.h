@@ -8,7 +8,7 @@
 #include <cstring>
 
 
-const unsigned int START_ADDRESS = 0x200;
+//const unsigned int START_ADDRESS = 0x200;
 
 //declaring constructor chip8.h -> defining it in chip8.cpp -> initiating it in main.cpp
 class Chip8
