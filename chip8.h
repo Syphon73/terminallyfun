@@ -22,6 +22,8 @@ public:
 
   bool refreshScreen();
   void graphic(uint8_t x,uint8_t y,uint8_t height);
+  
+  void keyboard_poll(uint8_t keypad[16]);
 
   static const unsigned int FONTSET_SIZE = 80;
   uint8_t fontset[FONTSET_SIZE];
