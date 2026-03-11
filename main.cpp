@@ -5,6 +5,10 @@
 #include <cstdint>
 #include <fstream>
 
+#include "rlImGui.h"
+#include "imgui.h"
+#include "assembler.h"
+
 const int SCALE = 10;
 //const unsigned int CHIP8_NUM_KEYS = 16;
 
@@ -51,11 +55,13 @@ int main (int argc, char *argv[]) {
   Chip8 myChip8;
 
   std::cout << "Loading ROM..." << std::endl; 
-  myChip8.LoadROM("testROM/5-quirks.ch8"); 
+  myChip8.LoadROM("testROM/Tetris.ch8"); 
   std::cout << "ROM loaded! Starting emulation loop..." << std::endl;
 
   InitWindow(64 * SCALE, 32 * SCALE, "CHIP-8 Emulator");
   SetTargetFPS(60);
+
+  rlImGuiSetup(true);
   
   while(!WindowShouldClose()){
    
@@ -71,11 +77,19 @@ int main (int argc, char *argv[]) {
       drawGraphics(myChip8);
       myChip8.drawflag = false;
     }
+
+
+    rlImGuiBegin();
+    DrawDebuggerUI(myChip8);
+    rlImGuiEnd();
+
    
     //usleep(2000);
     EndDrawing();
 
   }
+
+  rlImGuiShutdown();
 
   return 0;
 }
