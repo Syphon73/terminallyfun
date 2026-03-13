@@ -1,1 +1,10 @@
-g++ chip8.cpp main.cpp -o chip8 -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
+g++ main.cpp chip8.cpp debugger.cpp \
+  libs/imgui/imgui.cpp \
+  libs/imgui/imgui_draw.cpp \
+  libs/imgui/imgui_tables.cpp \
+  libs/imgui/imgui_widgets.cpp \
+  libs/rlImGui/rlImGui.cpp \
+  -Ilibs/imgui \
+  -Ilibs/rlImGui \
+  -o chip8 \
+  -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
