@@ -42,7 +42,7 @@ Chip8::Chip8() {
   sp = 0; 
   
   drawflag = false;
-
+   
   memset(memory, 0, sizeof(memory));
   memset(registers, 0, sizeof(registers));
   memset(stack, 0, sizeof(stack));
@@ -50,11 +50,20 @@ Chip8::Chip8() {
   memset(keypad, 0, sizeof(keypad));
   memset(stack, 0, sizeof(stack));
 
+  
   for (int i = 0; i < FONTSET_SIZE; ++i) {
       memory[i] = fontset[i];
   }
        
 };
+
+void Chip8::initRaylibTexture(){
+    target = LoadRenderTexture(64,32);
+
+}
+void Chip8::clearRaylibTexture(){
+    UnloadRenderTexture(target);
+}
 
 // Layout:
 //   1 2 3 C    →  1 2 3 4
@@ -145,8 +154,8 @@ void Chip8::graphic(uint8_t x, uint8_t y, uint8_t height){
   // TODO: read sprite from memory
   uint8_t pixel;
   //drawing()
-  int targetX = x % 64;
-  int targetY = y % 32;
+  //int targetX = x % 64;
+  //int targetY = y % 32;
 
   
   for (int yline = 0; yline < height; yline++)
