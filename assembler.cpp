@@ -2,10 +2,12 @@
 #include <format>
 #include "imgui.h"
 #include "rlImGui.h"
+int screenWidth = GetScreenWidth();
+int screenHeight = GetScreenHeight();
+//ImGui::GetStyle().ScaleAllSizes(2.2f);
 
 void DrawRegisters(Chip8 &chip8){
-  ImGui::Begin("Registers");
-
+    
     for(int i=0;i<16;i++)
     {
         ImGui::Text("V%X : %02X", i, chip8.registers[i]);
@@ -20,8 +22,7 @@ void DrawRegisters(Chip8 &chip8){
     ImGui::Text("Delay : %d", chip8.delayTimer);
     ImGui::Text("Sound : %d", chip8.soundTimer);
 
-    ImGui::End();
-}
+  }
 
 std::string DrawDissassembler(uint16_t instr)
 {
@@ -160,7 +161,7 @@ std::string DrawDissassembler(uint16_t instr)
 }
 
 void DrawInstructions(Chip8& chip8){
-  ImGui::Begin("Instructions");
+  
   int start_addr = chip8.pc - 20;
   for(int i=0;i<20;i++)
   {
@@ -181,16 +182,37 @@ void DrawInstructions(Chip8& chip8){
               "%03X  %04X  %s",
               curr_addr, opcode, inst.c_str());
   }
-  ImGui::End();
-}
+ }
 
 
 void DrawDebuggerUI(Chip8& chip8)
 {
+    //----------------left debugger window---------------------
+    ImGui::SetNextWindowPos(ImVec2(20, 50), ImGuiCond_Always);
+    //ImGui::SetNextWindowSize(ImVec2(250, 400), ImGuiCond_Always);
+    ImGui::SetNextWindowSize(
+      ImVec2(screenWidth * 0.25f, screenHeight * 0.7f),
+      ImGuiCond_Always
+    );
+    ImGui::Begin("Registers");
+    ImGui::SetWindowFontScale(1.5f);
     DrawRegisters(chip8);
+    ImGui::End();
     // DrawMemory();
+
     DrawDissassembler(chip8.opcode);
+    //-----------right debugger window-----------------------
+    ImGui::SetNextWindowPos(ImVec2(GetScreenWidth() - 350, 50));
+    ImGui::SetNextWindowSize(
+      ImVec2(screenWidth * 0.25f, screenHeight * 2.7f),
+      ImGuiCond_Always
+    );
+    
+    ImGui::Begin("Instructions");
+    ImGui::SetWindowFontScale(1.5f);
     DrawInstructions(chip8);
+    ImGui::End();
+
     // DrawKeypad();
     // DrawState();
 }

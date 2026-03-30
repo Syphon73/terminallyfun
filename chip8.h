@@ -6,6 +6,7 @@
 #include <fstream>
 #include <iostream>
 #include <cstring>
+#include "raylib.h"
 
 
 //const unsigned int START_ADDRESS = 0x200;
@@ -30,6 +31,9 @@ public:
   bool drawflag;
   
 
+  RenderTexture2D target;
+  void initRaylibTexture();
+  void clearRaylibTexture();
 
 	uint8_t registers[16]{};
 	uint8_t memory[4096]{};
