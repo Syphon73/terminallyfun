@@ -33,3 +33,5 @@ A 0 B F       Z X C V
 ## Test ROMs
 
 The `testROM/` directory includes several ROMs for testing different emulator features (logo display, CPU flags, quirks, keypad, beep, scrolling).
+
+https://excalidraw.com/#json=CZlab49KlHUe5pOIwgBl7,5TflS7u3w_1LMQ6ZL_yF2A
